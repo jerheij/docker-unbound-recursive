@@ -1,6 +1,6 @@
 FROM ubuntu:jammy
 
-ENV UID=1100 GID=1100 IP=0.0.0.0 IPv6=no PORT=53
+ENV UID=1100 GID=1100 IP=0.0.0.0 IPv6=no PORT=53 VERBOSITY=0
 
 COPY rootfs /
 
@@ -16,4 +16,4 @@ RUN apt-get update -y && \
 
 ENTRYPOINT ["/entry.sh"]
 
-CMD ["/usr/sbin/unbound"]
+CMD ["/usr/sbin/unbound", "-d"]

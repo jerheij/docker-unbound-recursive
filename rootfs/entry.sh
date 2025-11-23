@@ -4,22 +4,21 @@ rm -vf /etc/unbound/unbound.conf.d/*.conf
 
 # curl -o /var/lib/unbound/root.hints https://www.internic.net/domain/named.root
 
-unbound-anchor -a /var/lib/unbound/root.key
-
 cat > /etc/unbound/unbound.conf.d/server.conf<< EOF
 server:
     # If no logfile is specified, syslog is used
-    # logfile: "/var/log/unbound/unbound.log"
-    verbosity: 0
+    logfile: ""
+    verbosity: ${VERBOSITY}
+    log-queries: yes
 
     # Permission stuff
-    username: "root"
-    chroot: ""
+    username: "dns"
+    # chroot: ""
 
     # Enable visibility to other containers on the same network
     interface: ${IP}
     access-control: 0.0.0.0/0 allow
-    port: ${PORT}}
+    port: ${PORT}
     do-ip4: yes
     do-udp: yes
     do-tcp: yes
@@ -95,8 +94,10 @@ server:
 
 EOF
 
-/usr/sbin/unbound-checkconf
+/usr/sbin/unbound-checkconf -f /etc/unbound/unbound.conf.d/server.conf
 
-echo "Remote control disabled"
+# Fix permissions
+usermod -u $UID dns
+groupmod -g $GID dns
 
 exec "$@"
