@@ -12,6 +12,10 @@ server:
     # logfile: "/var/log/unbound/unbound.log"
     verbosity: 0
 
+    # Permission stuff
+    username: "root"
+    chroot: ""
+
     # Enable visibility to other containers on the same network
     interface: ${IP}
     access-control: 0.0.0.0/0 allow
