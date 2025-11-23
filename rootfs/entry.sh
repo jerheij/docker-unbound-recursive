@@ -1,10 +1,14 @@
 #!/bin/bash
 
-rm -vf /etc/unbound/unbound.conf.d/*.conf
 
 # curl -o /var/lib/unbound/root.hints https://www.internic.net/domain/named.root
 
-cat > /etc/unbound/unbound.conf.d/server.conf<< EOF
+if [[ $MANAGED == true ]]
+then
+  echo "Config file is managed"
+
+  rm -vf /etc/unbound/unbound.conf.d/*.conf
+  cat > /etc/unbound/unbound.conf.d/server.conf<< EOF
 server:
     # If no logfile is specified, syslog is used
     logfile: ""
@@ -93,6 +97,10 @@ server:
       control-enable: no
 
 EOF
+elif [[ $MANAGED == false ]]
+then
+  echo "Config file is unmanaged, make sure you mount '/etc/unbound' and put all the requirement configuration files in there"
+fi
 
 /usr/sbin/unbound-checkconf -f /etc/unbound/unbound.conf.d/server.conf
 
