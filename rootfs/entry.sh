@@ -90,8 +90,13 @@ server:
     private-address: 255.255.255.255/32
     private-address: 2001:db8::/32
 
+    remote-control:
+      control-enable: no
+
 EOF
 
 /usr/sbin/unbound-checkconf
+
+echo "Remote control disabled"
 
 exec "$@"
