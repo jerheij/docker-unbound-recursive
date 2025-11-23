@@ -108,4 +108,30 @@ fi
 usermod -u $UID dns
 groupmod -g $GID dns
 
-exec "$@"
+
+echo "Starting unbound..."
+unbound -d &
+
+# Cache loading
+if [ -f /var/lib/unbound/unbound.cache ]
+then
+  echo "Cache file available, checking DNS readiness"
+
+  function check_google
+  {
+    dig www.google.com @${IP} -p ${PORT} > /dev/null 2>&1; echo $?
+  }
+
+  until [[ $(check_google) -eq "0" ]]; do
+    echo "DNS not ready, waiting..."
+    sleep 2
+  done
+
+  echo "Loading cache"
+  unbound-control load_cache < /var/lib/unbound/unbound.cache
+else
+  echo "No cache file available"
+  exit 0
+fi
+
+wait

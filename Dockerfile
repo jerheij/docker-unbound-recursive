@@ -6,7 +6,7 @@ COPY rootfs /
 
 RUN apt-get update -y && \
     apt-get upgrade -y && \
-    apt-get install -y unbound unbound-anchor curl dnsutils ca-certificates && \
+    apt-get install -y unbound unbound-anchor dnsutils ca-certificates && \
     apt-get clean all && \
     rm -rf /var/lib/apt/lists/* && \
     chmod +x /entry.sh && \
@@ -15,5 +15,3 @@ RUN apt-get update -y && \
     chown -vR dns: /etc/unbound
 
 ENTRYPOINT ["/entry.sh"]
-
-CMD ["/usr/sbin/unbound", "-d"]
