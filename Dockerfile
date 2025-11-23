@@ -16,4 +16,4 @@ RUN apt-get update -y && \
 
 ENTRYPOINT ["/entry.sh"]
 
-CMD ["/usr/sbin/unbound-control", "start"]
+CMD ["/usr/sbin/unbound"]
