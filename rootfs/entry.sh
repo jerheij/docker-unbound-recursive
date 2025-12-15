@@ -131,7 +131,6 @@ then
   unbound-control load_cache < /var/lib/unbound/unbound.cache
 else
   echo "No cache file available"
-  exit 0
 fi
 
 wait
